@@ -1,2 +1,2 @@
-# CircleCIDemo
+# MentiLeaders
 Testing the CI/CD workflow
