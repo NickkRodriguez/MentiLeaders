@@ -1,0 +1,20 @@
+.leader {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .leader .leaderTitle {
+    font-family: cursive;
+    font-size: 60px;
+  }
+  
+  .leaderList {
+    width: 70vw;
+    height: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    place-items: center;
+  }
