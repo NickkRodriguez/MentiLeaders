@@ -9,6 +9,11 @@ router.route("/new").post((req, res) => {
     .catch((err) => res.status(400).json("Ah Shit! " + err));
 });
 
+router.route("/test").post((req, res) => {
+  const newStudent = new Student(req.body);
+  res.status(201).json({ message: "This is just a test" });
+});
+
 router.route("/").get();
 
 router.route("/delete/:id").delete();
