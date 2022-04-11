@@ -11,7 +11,7 @@ const config = {
   baseURL: "http://localhost:3000",
   clientID: "L1bcGYFYXrKzyLFaOjBdxm9yC1bUdPkQ",
   issuerBaseURL: "https://dev-3flou5z2.us.auth0.com",
-  secret: "LONG_RANDOM_STRING",
+  secret: process.env.SECRET,
 };
 
 const app = express();
