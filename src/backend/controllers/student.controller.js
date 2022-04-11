@@ -6,7 +6,12 @@ router.route("/new").post((req, res) => {
   newStudent
     .save()
     .then((student) => res.json(student))
-    .catch((err) => res.status(400).json("Ah Shit! " + err));
+    .catch((err) => res.status(400).json("Error: " + err));
+});
+
+router.route("/test").post((req, res) => {
+  const newStudent = new Student(req.body);
+  res.status(201).json({ message: "This is just a test" });
 });
 
 router.route("/").get();
