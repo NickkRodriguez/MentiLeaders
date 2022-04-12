@@ -6,6 +6,7 @@ import LeaderBoard from './pages/Leaderboard';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import { BrowserRouter as Router, Route, Routes as Switch } from 'react-router-dom';
+import { ParseExcel } from './components/ParseExcel';
 
 function App() { 
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path='/leaderboard' exact element={<LeaderBoard />} />
           <Route path='/about' exact element={<About />} />
           <Route path='/contact' exact element={<Contact />} />
+          <Route path='/parse-excel' element={<ParseExcel />} />
         </Switch>
         <Footer />
       </Router>
