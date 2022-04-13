@@ -1,5 +1,5 @@
 const supertest = require("supertest");
-const { app, server } = require("./server");
+const { app } = require("./server");
 const request = supertest(app);
 const { connectDB, disconnectDB } = require("./database");
 
@@ -10,16 +10,15 @@ describe("API test", () => {
 
   afterAll(async () => {
     disconnectDB();
-    server.close();
   });
 
-  describe("POST /students/test", () => {
+  describe("POST /api/v1/mentileaders/test", () => {
     it("example POST request using a mocked database instance", async () => {
-      const newStudent = {
+      const newUser = {
         username: "Test",
         score: 2,
       };
-      const res = await request.post("/students/test").send(newStudent);
+      const res = await request.post("/api/v1/mentileaders/test").send(newUser);
 
       await expect(res.status).toBe(201);
     });
