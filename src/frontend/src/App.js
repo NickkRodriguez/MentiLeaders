@@ -6,6 +6,8 @@ import AddUser from "./components/add-user";
 import User from "./components/user";
 import UsersList from "./components/users-list";
 import Login from "./components/login";
+import { ImportExcel } from './components/import-excel';
+import { Blank } from './components/blank';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -45,6 +47,11 @@ function App() {
               </Link>
             )}
           </li>
+          <li className="nav-item">
+            <Link to={"/import-excel"} className="nav-link">
+              Import
+            </Link>           
+          </li>
         </div>
       </nav>
 
@@ -62,6 +69,14 @@ function App() {
           <Route
             path="/login"
             render={(props) => <Login {...props} login={login} />}
+          />
+          <Route
+            path="/import-excel"
+            render={(props) => <ImportExcel {...props} />}
+          />
+          <Route
+            path="/blank"
+            render={(props) => <Blank {...props} />}
           />
         </Switch>
       </div>
