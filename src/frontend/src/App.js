@@ -1,6 +1,7 @@
 import React from "react";
 import { Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import * as ReactBootStrap from "react-bootstrap";
 
 import AddUser from "./components/add-user";
 import User from "./components/user";
@@ -8,6 +9,9 @@ import UsersList from "./components/users-list";
 import Login from "./components/login";
 import { ImportExcel } from './components/import-excel';
 import { Blank } from './components/blank';
+
+import logo from "./MentiLeader.png";
+import './App.css';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -19,17 +23,52 @@ function App() {
   async function logout() {
     setUser(null);
   }
+
+  const users = [
+
+    {name: "Aaron", score: "1", attendance: "1"},
+    {name: "Alex", score: "2", attendance: "2"},
+    {name: "Nick", score: "3", attendance: "1"},
+    {name: "Willy", score: "4", attendance: "3"},
+    {name: "Will Smith", score: "5", attendance: "1"},
+    {name: "Chris Rock", score: "6", attendance: "2"},
+    {name: "Bruh", score: "69420", attendance: "3"},
+  ]
+
+  const renderUser = (user, index) => {
+
+    return(
+      <tr>
+        <td>{user.name}</td>
+        <td>{user.score}</td>
+        <td>{user.attendance}</td>
+      </tr>
+    )
+
+  }
+
   return (
+
+
     <div>
-      <nav className="navbar navbar-expand navbar-dark bg-dark">
+
+      <ReactBootStrap.Navbar className="color-nav navbar-dark" variant="light" >
         <a href="/users" className="navbar-brand">
-          MentiLeaders
+          <img src={logo} width={50} height={50} alt="Logo"></img>
         </a>
-        <div className="navbar-nav mr-auto">
-          <li className="nav-item">
+        <div className="navbar-nav mr-auto navbar-light">
+          <li className="nav-item text-nav">
             <Link to={"/users"} className="nav-link">
-              Users
+              Home
             </Link>
+          </li>
+          <li className="nav-item text-nav">
+            <Link to={"/users"} className="nav-link">
+              Import Data
+            </Link>
+          </li>
+          <li className="nav-tem">
+
           </li>
           <li className="nav-item">
             {user ? (
@@ -53,7 +92,7 @@ function App() {
             </Link>           
           </li>
         </div>
-      </nav>
+      </ReactBootStrap.Navbar>
 
       <div className="container mt-3">
         <Switch>
@@ -79,6 +118,22 @@ function App() {
             render={(props) => <Blank {...props} />}
           />
         </Switch>
+      </div>
+
+      <div className="container mt-3">
+        <h1>Class</h1>
+        <ReactBootStrap.Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Score</th>
+              <th>Attendance</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map(renderUser)}
+          </tbody>
+        </ReactBootStrap.Table>
       </div>
     </div>
   );
