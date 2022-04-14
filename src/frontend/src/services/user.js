@@ -13,8 +13,11 @@ class UserDataService {
   createUser(data) {
     return http.post("/users", data);
   }
-  updateUser(data) {
-    return http.put("/users", data);
+  updateUserClass(data) {
+    return http.put("/users/class", data);
+  }
+  updateUserScore(data) {
+    return http.put("/users/score", data);
   }
 }
 

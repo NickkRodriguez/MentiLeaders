@@ -3,14 +3,14 @@ import UserDataService from "../services/user";
 
 const UsersList = (props) => {
   const [users, setUsers] = useState([]);
-  const [username, setUsername] = useState(null);
+  // const [username, setUsername] = useState(null);
 
   useEffect(() => {
     retrieveUsers();
   }, []);
 
   const retrieveUsers = () => {
-    UserDataService.getAll()
+    UserDataService.getClass("COP4600")
       .then((response) => {
         console.log(response.data);
         setUsers(response.data.users);
@@ -28,6 +28,13 @@ const UsersList = (props) => {
     <div>
       <div className="row">
         {users.map((user) => {
+          var index;
+          for (var i = 0; i < user.classes.length; i++) {
+            if (user.classes[i] === "COP4600") {
+              index = i;
+              break;
+            }
+          }
           return (
             <div className="col-lg-4 pb-1">
               <div className="card">
@@ -35,13 +42,11 @@ const UsersList = (props) => {
                   <h5 className="card-title">{user.username}</h5>
                   <p className="card-text">
                     <strong>Score: </strong>
-                    {user.score}
+                    {user.scores[index]}
                     <br />
                     <strong>Classname: </strong>
-                    {user.classname}
+                    {user.classes[index]}
                     <br />
-                    <strong>Attendance: </strong>
-                    {user.attendance}
                   </p>
                 </div>
               </div>

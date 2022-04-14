@@ -17,11 +17,11 @@ class UserDAO {
     }
   }
 
-  static async getUser({ filters = null, page = 0, usersPerPage = 100 } = {}) {
+  static async getUser({ filters = null, page = 0, usersPerPage = 20 } = {}) {
     let query;
     if (filters) {
       if ("classname" in filters) {
-        query = { $text: { $search: filters["classname"] } };
+        query = { classes: filters["classname"] };
       }
       if ("username" in filters) {
         query = { $text: { $search: filters["username"] } };
@@ -52,13 +52,16 @@ class UserDAO {
     }
   }
 
-  static async addUser(username, score, classname, attendance, date) {
+  static async addUser(username, score, classname, date) {
     try {
+      let classes = [];
+      classes.push(classname);
+      let scores = [];
+      scores.push(score);
       const userDoc = {
         username: username,
-        score: score,
-        classname: classname,
-        attendance: attendance,
+        scores: scores,
+        classes: classes,
         date: date,
       };
       return await users.insertOne(userDoc);
@@ -67,24 +70,64 @@ class UserDAO {
     }
   }
 
-  static async updateUser(username, score, date) {
+  static async updateUserClass(
+    username,
+    score,
+    scores,
+    classname,
+    classes,
+    date
+  ) {
     try {
       let query;
       query = { $text: { $search: username } };
       let cursor;
       cursor = await users.find(query);
-      const displayCursor = cursor.limit(100).skip(0);
-      const usersList = await displayCursor.toArray();
+      const usersList = await cursor.toArray();
       const userId = usersList[0]._id;
+      classes.push(classname);
+      scores.push(score);
       const updateResponse = await users.updateOne(
         { _id: ObjectId(userId) },
-        { $inc: { score: score, attendance: 1 } },
-        { $set: { date: date } }
+        { $set: { date: date, classes: classes, scores: scores } }
       );
 
       return updateResponse;
     } catch (e) {
-      console.error(`Unable to update user: ${e}`);
+      console.error(`Unable to update user class: ${e}`);
+    }
+  }
+
+  static async updateUserScore(
+    username,
+    score,
+    scores,
+    classname,
+    classes,
+    date
+  ) {
+    try {
+      let query;
+      query = { $text: { $search: username } };
+      let cursor;
+      cursor = await users.find(query);
+      const usersList = await cursor.toArray();
+      const userId = usersList[0]._id;
+      var index;
+      for (var i = 0; i < classes.length; i++) {
+        if (classes[i] === classname) {
+          index = i;
+          break;
+        }
+      }
+      scores[index] += score;
+      const updateResponse = await users.updateOne(
+        { _id: ObjectId(userId) },
+        { $set: { date: date, scores: scores } }
+      );
+      return updateResponse;
+    } catch (e) {
+      console.error(`Unable to update user score: ${e}`);
     }
   }
 }
