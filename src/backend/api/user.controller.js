@@ -36,14 +36,12 @@ class UserController {
       const username = req.body.username;
       const score = req.body.score;
       const classname = req.body.classname;
-      const attendance = 1;
       const date = new Date();
 
       const UserResponse = await UserDAO.addUser(
         username,
         score,
         classname,
-        attendance,
         date
       );
       res.json({ status: "successfully added user" });
@@ -52,16 +50,49 @@ class UserController {
     }
   }
 
-  static async apiUpdateUser(req, res, next) {
+  static async apiUpdateUserClass(req, res, next) {
     try {
       const username = req.body.username;
       const score = req.body.score;
+      const scores = req.body.scores;
+      const classname = req.body.classname;
+      const classes = req.body.classes;
       const date = new Date();
 
-      const UserResponse = await UserDAO.updateUser(username, score, date);
-      res.json({ status: "successfully updated user" });
+      const UserResponse = await UserDAO.updateUserClass(
+        username,
+        score,
+        scores,
+        classname,
+        classes,
+        date
+      );
+      res.json({ status: "successfully updated user class" });
     } catch (e) {
       res.status(501).json({ error: e.message });
+    }
+  }
+
+  static async apiUpdateUserScore(req, res, next) {
+    try {
+      const username = req.body.username;
+      const score = req.body.score;
+      const scores = req.body.scores;
+      const classname = req.body.classname;
+      const classes = req.body.classes;
+      const date = new Date();
+
+      const UserResponse = await UserDAO.updateUserScore(
+        username,
+        score,
+        scores,
+        classname,
+        classes,
+        date
+      );
+      res.json({ status: "successfully updated user score" });
+    } catch (e) {
+      res.status(502).json({ error: e.message });
     }
   }
 }
