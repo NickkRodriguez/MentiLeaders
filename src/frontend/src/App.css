@@ -1,6 +1,12 @@
-.App {
+.login {
   text-align: center;
 }
+
+.error-text {
+  color: #ff0000;
+  display:block;
+}
+
 
 .App-logo {
   height: 40vmin;
