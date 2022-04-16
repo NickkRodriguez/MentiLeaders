@@ -1,17 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { React, useState } from 'react';
 import { readFile, utils } from 'xlsx';
 
 import UserDataService from "../services/user";
 import User from './user';
 
-//for debuggin
-//import http from "../http-common";
-
 export const ImportExcel = () => {
     const [file, setFile] = useState(null);
     const [courseName, setCourseName] = useState(null);
-    const [studentName, setStudentName] = useState(null);
-    const [students, setStudents] = useState([]);
 
     // function that updates the excel file that is inputted into form
     const handleFileChange = async (e) => {
@@ -40,94 +35,71 @@ export const ImportExcel = () => {
         var range = utils.decode_range(students_worksheet['!ref']);
         var numStudents = range.e.r - range.s.r - 2;
 
-        // loads excel worksheet with leaderboard, determines row where leaderboard begins
+        // loads leaderboard from excel worksheet, determines row where leaderboard begins
         const leaderboard_worksheet = workbook.Sheets[workbook.SheetNames[1]];
         const jsonData = utils.sheet_to_json(leaderboard_worksheet, { raw: true, header: 1 , blankrows: false});
         var col = jsonData.map(function(value,index) { return value[0]; });
         var lb_start = col.lastIndexOf("Position");
 
-        // loops through every student in leaderboard,
-        //var lb = Array.from(Array(numStudents), () => new Array(3));
+        // loops through every student in leaderboard to add scores from excel worksheet to the database
         for(var i = 1; i <= numStudents; i++)
         {
             console.log(jsonData[lb_start + i][0] + " " + jsonData[lb_start + i][1] +  " " + jsonData[lb_start + i][3]);
-            //lb[i - 1][0] = jsonData[lb_start + i][0];
-            //lb[i - 1][1] = jsonData[lb_start + i][1];
-            //lb[i - 1][2] = jsonData[lb_start + i][2];
-            const response = await  UserDataService.getUser(jsonData[lb_start + i][1]);
-            console.log(response.data)
+            const response = await UserDataService.getUser(jsonData[lb_start + i][1]);
+
             if(response.data.total_results != 0) // user already exists in DB
             {
-                var username = response.data.users[0].username;
-                //console.log(username);
-                var courses = response.data.users[0].classes;
+                console.log(jsonData[lb_start + i][1] + " is in DB");
+                var student = response.data.users[0];
+                var name = student.username;
+                var courses = student.classes;
+
+                var updatedStudent = {
+                    "username" : name,
+                    "score" : jsonData[lb_start + i][3],
+                    "scores" : student.scores,
+                    "classname" : courseName,
+                    "classes" : courses,
+                    //"date" : null,
+                }
+
+                // determining if user has a previous score from course entered into form
                 var found = false;
-                var index = -1;
                 for(let i = 0; i < courses.length; i++)
                 {
                     if(courses[i] == courseName)
                     {
                         found = true;
-                        index = i;
                         break;
                     }
-                }       
+                }      
+                 
                 if(found) // user already has a score for specified course
                 {
-                    console.log(username + " is in course " + courseName);
-                    response.data.users[0].scores[index] += jsonData[lb_start + i][3];
-                    console.log(response.data.users[0].scores[index]);
-                    
-                    const result = await UserDataService.updateUser(response.data); 
+                    console.log(name + " is in course " + courseName);
+                    const result = await UserDataService.updateUserScore(updatedStudent); 
                     console.log(result.data);
                 }
                 else // user does not yet have a score for specified course
                 {
-                    console.log(username + " is not in course " + courseName);
+                    console.log(name + " is not in course " + courseName);
+                    const result = await UserDataService.updateUserClass(updatedStudent);
+                    console.log(result.data);
                 }
             }
-            else // user does exist in DB
+            else // user does not exist in DB
             {
-                console.log("Not found in DB");
+                console.log(jsonData[lb_start + i][1] + "is not in DB");
+                var newStudent = {
+                    "username" : jsonData[lb_start + i][1],
+                    "score" : jsonData[lb_start + i][3],
+                    "classname" : courseName,
+                    //"date" : null,
+                }
+                const result = await UserDataService.createUser(newStudent);
+                console.log(result.data);
             }
-            //UserDataService.getUser(jsonData[lb_start + i][1])
-            //.then((response) => {
-                //handleStudent(response, i, lb_start, jsonData);
-                //console.log(response.data)
-                //if(response.data.total_results != 0) // user already exists in DB
-                //{
-                //    var username = response.data.users[0].username;
-                //    //console.log(username);
-                //    var courses = response.data.users[0].classes;
-                //    var found = false;
-                //    var index = -1;
-                //    for(let i = 0; i < courses.length; i++)
-                //    {
-                //        if(courses[i] == courseName)
-                //        {
-                //            found = true;
-                //            index = i;
-                //            break;
-                //        }
-                //    }       
-                //   if(found) // user already has a score for specified course
-                //    {
-                //        console.log(username + " is in course " + courseName);
-                //        response.data.users[0].scores[index] += jsonData[lb_start + i][3];
-                //        console.log(response.data.users[0].scores[index]);
-                //    }
-                //    else // user does not yet have a score for specified course
-                //    {
-                //        console.log(username + " is not in course " + courseName);
-                //    }
-                //}
-                //else // user does exist in DB
-                //{
-                //    console.log("Not found in DB");
-                //}
-            //}); 
         }
-        //setLeaderboard(lb);
     };
 
     return (
