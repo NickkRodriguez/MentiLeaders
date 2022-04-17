@@ -58,9 +58,20 @@ const ClassList = (props) => {
 
   return (
     <div>
-      <button onClick={retrieveClassObjs} className="btn btn-success">
-        Retrieve User Leaderboards
-      </button>
+      {classObjs.length ? (
+        <button onClick={retrieveClassObjs} className="btn btn-success">
+          Refresh User Leaderboards
+        </button>
+      ) : (
+        <div>
+          <h5>
+            Please login with valid username to retrieve class leaderboards
+          </h5>
+          <button onClick={retrieveClassObjs} className="btn btn-success">
+            Retrieve User Leaderboards
+          </button>
+        </div>
+      )}
       <div className="row">
         {classObjs.map((classObj) => {
           var index = 0;
