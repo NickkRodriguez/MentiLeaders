@@ -2,7 +2,6 @@ import { React, useState } from 'react';
 import { readFile, utils } from 'xlsx';
 
 import UserDataService from "../services/user";
-import User from './user';
 
 export const ImportExcel = () => {
     const [file, setFile] = useState(null);
@@ -47,7 +46,7 @@ export const ImportExcel = () => {
             console.log(jsonData[lb_start + i][0] + " " + jsonData[lb_start + i][1] +  " " + jsonData[lb_start + i][3]);
             const response = await UserDataService.getUser(jsonData[lb_start + i][1]);
 
-            if(response.data.total_results != 0) // user already exists in DB
+            if(response.data.total_results !== 0) // user already exists in DB
             {
                 console.log(jsonData[lb_start + i][1] + " is in DB");
                 var student = response.data.users[0];
@@ -67,7 +66,7 @@ export const ImportExcel = () => {
                 var found = false;
                 for(let i = 0; i < courses.length; i++)
                 {
-                    if(courses[i] == courseName)
+                    if(courses[i] === courseName)
                     {
                         found = true;
                         break;

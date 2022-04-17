@@ -3,8 +3,6 @@ import { Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import * as ReactBootStrap from "react-bootstrap";
 
-import AddUser from "./components/add-user";
-import User from "./components/user";
 import ClassList from "./components/class-list";
 import Login from "./components/login";
 import { ImportExcel } from "./components/import-excel";
@@ -86,16 +84,7 @@ function App() {
           <Route
             exact
             path={["/", "/users"]}
-            component={ClassList}
             render={(props) => <ClassList {...props} user={user} />}
-          />
-          <Route
-            path="/users/:id/update"
-            render={(props) => <AddUser {...props} user={user} />}
-          />
-          <Route
-            path="/users/:id"
-            render={(props) => <User {...props} user={user} />}
           />
           <Route
             path="/login"
@@ -109,7 +98,7 @@ function App() {
         </Switch>
       </div>
 
-      <div className="container mt-3">
+      {/* <div className="container mt-3">
         <h1>Class</h1>
         <ReactBootStrap.Table striped bordered hover>
           <thead>
@@ -121,7 +110,7 @@ function App() {
           </thead>
           <tbody>{users.map(renderUser)}</tbody>
         </ReactBootStrap.Table>
-      </div>
+      </div> */}
     </div>
   );
 }
