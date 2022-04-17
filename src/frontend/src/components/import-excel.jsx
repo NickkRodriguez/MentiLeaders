@@ -1,17 +1,12 @@
-import React, { Component, useEffect, useState } from 'react';
+import { React, useState } from 'react';
 import { readFile, utils } from 'xlsx';
+
 import UserDataService from "../services/user";
+import User from './user';
 
 export const ImportExcel = () => {
     const [file, setFile] = useState(null);
     const [courseName, setCourseName] = useState(null);
-    //const [studentsInClass, setStudentsInClass] = useState([null]);
-    const [studentName, setStudentName] = useState(null);
-    const [student, setStudent] = useState(null);
-
-    useEffect( () => {
-        retrieveStudent(studentName);
-    }, [studentName]);
 
     // function that updates the excel file that is inputted into form
     const handleFileChange = async (e) => {
@@ -25,32 +20,9 @@ export const ImportExcel = () => {
         setCourseName(courseName);
     };
 
-    // 
-    //const retrieveClass = () => {
-    //    UserDataService.getClass(courseName)
-    //      .then((response) => {
-    //        console.log(response.data);
-    //        setStudentsInClass(response.data.users);
-    //      })
-    //      .catch((e) => {
-    //        console.log(e);
-    //      });
-    //};
-
-    //
-    const retrieveStudent = (name) => {
-        UserDataService.getUser(name)
-          .then((response) => {
-              console.log(response.data);
-              setStudent(response.data);
-          })
-          .catch((e) => {
-              console.log(e);
-          });
-    }; 
-    
     // function that submits new quiz data to database
     const handleSubmit = async (e) => {
+        e.preventDefault();
         if(file == null)
         {
             return;
@@ -63,23 +35,71 @@ export const ImportExcel = () => {
         var range = utils.decode_range(students_worksheet['!ref']);
         var numStudents = range.e.r - range.s.r - 2;
 
-        // loads excel worksheet with leaderboard, determines row where leaderboard begins
+        // loads leaderboard from excel worksheet, determines row where leaderboard begins
         const leaderboard_worksheet = workbook.Sheets[workbook.SheetNames[1]];
         const jsonData = utils.sheet_to_json(leaderboard_worksheet, { raw: true, header: 1 , blankrows: false});
         var col = jsonData.map(function(value,index) { return value[0]; });
         var lb_start = col.lastIndexOf("Position");
 
-        // loops through every student in leaderboard,
+        // loops through every student in leaderboard to add scores from excel worksheet to the database
         for(var i = 1; i <= numStudents; i++)
         {
             console.log(jsonData[lb_start + i][0] + " " + jsonData[lb_start + i][1] +  " " + jsonData[lb_start + i][3]);
-        }
-        //console.log("students in course: " + courseName);
-        setStudentName("First Post");
-        console.log(student);
+            const response = await UserDataService.getUser(jsonData[lb_start + i][1]);
 
-        //let student = await UserDataService.getUser("First Post");
-        //console.log(student);
+            if(response.data.total_results != 0) // user already exists in DB
+            {
+                console.log(jsonData[lb_start + i][1] + " is in DB");
+                var student = response.data.users[0];
+                var name = student.username;
+                var courses = student.classes;
+
+                var updatedStudent = {
+                    "username" : name,
+                    "score" : jsonData[lb_start + i][3],
+                    "scores" : student.scores,
+                    "classname" : courseName,
+                    "classes" : courses,
+                    //"date" : null,
+                }
+
+                // determining if user has a previous score from course entered into form
+                var found = false;
+                for(let i = 0; i < courses.length; i++)
+                {
+                    if(courses[i] == courseName)
+                    {
+                        found = true;
+                        break;
+                    }
+                }      
+                 
+                if(found) // user already has a score for specified course
+                {
+                    console.log(name + " is in course " + courseName);
+                    const result = await UserDataService.updateUserScore(updatedStudent); 
+                    console.log(result.data);
+                }
+                else // user does not yet have a score for specified course
+                {
+                    console.log(name + " is not in course " + courseName);
+                    const result = await UserDataService.updateUserClass(updatedStudent);
+                    console.log(result.data);
+                }
+            }
+            else // user does not exist in DB
+            {
+                console.log(jsonData[lb_start + i][1] + "is not in DB");
+                var newStudent = {
+                    "username" : jsonData[lb_start + i][1],
+                    "score" : jsonData[lb_start + i][3],
+                    "classname" : courseName,
+                    //"date" : null,
+                }
+                const result = await UserDataService.createUser(newStudent);
+                console.log(result.data);
+            }
+        }
     };
 
     return (
