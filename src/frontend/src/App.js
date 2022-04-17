@@ -22,26 +22,6 @@ function App() {
     setUser(null);
   }
 
-  const users = [
-    { name: "Aaron", score: "1", attendance: "1" },
-    { name: "Alex", score: "2", attendance: "2" },
-    { name: "Nick", score: "3", attendance: "1" },
-    { name: "Willy", score: "4", attendance: "3" },
-    { name: "Will Smith", score: "5", attendance: "1" },
-    { name: "Chris Rock", score: "6", attendance: "2" },
-    { name: "Bruh", score: "69420", attendance: "3" },
-  ];
-
-  const renderUser = (user, index) => {
-    return (
-      <tr>
-        <td>{user.name}</td>
-        <td>{user.score}</td>
-        <td>{user.attendance}</td>
-      </tr>
-    );
-  };
-
   return (
     <div>
       <ReactBootStrap.Navbar className="color-nav navbar-dark" variant="light">
@@ -97,20 +77,6 @@ function App() {
           <Route path="/blank" render={(props) => <Blank {...props} />} />
         </Switch>
       </div>
-
-      {/* <div className="container mt-3">
-        <h1>Class</h1>
-        <ReactBootStrap.Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Score</th>
-              <th>Attendance</th>
-            </tr>
-          </thead>
-          <tbody>{users.map(renderUser)}</tbody>
-        </ReactBootStrap.Table>
-      </div> */}
     </div>
   );
 }
