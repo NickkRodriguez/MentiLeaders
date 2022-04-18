@@ -23,17 +23,17 @@ export const ImportExcel = () => {
     // function that submits new quiz data to database
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(file == null && (courseName == null || courseName == ""))
+        if(file === null && (courseName === null || courseName === ""))
         {
             setMessage("Please select a file and enter a Course Name.")
             return;
         }
-        else if(file == null)
+        else if(file === null)
         {
             setMessage("Please select a file.")
             return;
         }
-        else if(courseName == null || courseName == "")
+        else if(courseName === null || courseName === "")
         {
             setMessage("Please enter a Course Name.")
             return;
