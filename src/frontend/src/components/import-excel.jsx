@@ -38,6 +38,7 @@ export const ImportExcel = () => {
             setMessage("Please enter a Course Name.")
             return;
         }
+        setMessage("Success.")
         const data = await file.arrayBuffer();
         const workbook = readFile(data);
 
@@ -111,7 +112,6 @@ export const ImportExcel = () => {
                 console.log(result.data);
             }
         }
-        setMessage("Success.")
     };
 
     return (
@@ -131,15 +131,15 @@ export const ImportExcel = () => {
 
     <div className="submit-form">
     <form>
-    <div class="d-flex flex-row">
-        <div class="p-2">
+    <div className="d-flex flex-row">
+        <div className="p-2">
             <label htmlFor="course">Course Name</label>
             <input type="text" className="form-control" id="course" onChange={(e) => handleTextChange(e)} />
         </div>
         <div class="p-2">
-            <label htmlfor="file-upload">Select a File</label>
+            <label htmlFor="file-upload">Select a File</label>
             <br />
-            <input type="file" class="form-control-file form-control-sm" id="file-upload" onChange={(e) => handleFileChange(e)} />
+            <input type="file" className="form-control-file form-control-sm" id="file-upload" onChange={(e) => handleFileChange(e)} />
         </div>
     </div>
     <div class="d-flex flex-row">
@@ -148,7 +148,7 @@ export const ImportExcel = () => {
                 Upload
             </button>
         </div>
-        <div class="p-2">
+        <div class="pl-1 pr-2 py-2 my-auto">
             <label> {message} </label>
         </div>
     </div>

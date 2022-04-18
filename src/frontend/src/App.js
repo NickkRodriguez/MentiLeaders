@@ -6,7 +6,6 @@ import * as ReactBootStrap from "react-bootstrap";
 import ClassList from "./components/class-list";
 import Login from "./components/login";
 import { ImportExcel } from "./components/import-excel";
-import { Blank } from "./components/blank";
 
 import logo from "./MentiLeader.png";
 import "./App.css";
@@ -24,23 +23,31 @@ function App() {
 
   return (
     <div>
-      <ReactBootStrap.Navbar className="color-nav navbar-dark" variant="light">
+      <ReactBootStrap.Navbar className="color-nav navbar-dark" variant="light"> 
+        {/* 
         <a href="/users" className="navbar-brand">
           <img src={logo} width={50} height={50} alt="Logo"></img>
+          <Link to={"/users"} className="nav-link"></Link>
         </a>
-        <div className="navbar-nav mr-auto navbar-light">
-          <li className="nav-item text-nav">
+        */}
+        <div className="navbar-nav navbar-light">
+          <li className="nav-item text-nav m-auto">
+            <Link to={"/users"} className="nav-link">
+              <img src={logo} width={40} height={40} alt="Logo"></img>
+            </Link>
+          </li>
+          <li className="nav-item text-nav m-auto">
             <Link to={"/users"} className="nav-link">
               Home
             </Link>
           </li>
-          <li className="nav-item text-nav">
+          <li className="nav-item text-nav m-auto">
             <Link to={"/import-excel"} className="nav-link">
               Import
             </Link>
           </li>
-          <li className="nav-tem"></li>
-          <li className="nav-item">
+          <li className="nav-tem m-auto"></li>
+          <li className="nav-item m-auto">
             {user ? (
               // eslint-disable-next-line jsx-a11y/anchor-is-valid
               <a
@@ -74,7 +81,6 @@ function App() {
             path="/import-excel"
             render={(props) => <ImportExcel {...props} />}
           />
-          <Route path="/blank" render={(props) => <Blank {...props} />} />
         </Switch>
       </div>
     </div>
