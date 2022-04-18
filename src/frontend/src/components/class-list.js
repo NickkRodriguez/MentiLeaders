@@ -3,38 +3,42 @@ import UserDataService from "../services/user";
 import * as ReactBootStrap from "react-bootstrap";
 
 const ClassList = (props) => {
-  const [classes, setClasses] = useState([]);
-  const [users, setUsers] = useState([]);
+  //const [classes, setClasses] = useState([]);
+  //const [users, setUsers] = useState([]);
   const [classObjs, setClassObjs] = useState([]);
 
   useEffect(() => {
     retrieveClassObjs();
   }, []);
 
-  const retrieveClasses = () => {
-    UserDataService.getUser(props.user.name)
-      .then((response) => {
-        console.log(response.data);
-        setClasses(response.data.users[0].classes);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+  const retrieveClasses = async () => {
+    //UserDataService.getUser(props.user.name)
+    //  .then((response) => {
+    //    console.log(response.data);
+    //    setClasses(response.data.users[0].classes);
+    //  })
+    //  .catch((e) => {
+    //    console.log(e);
+    //  });
+    const response = await UserDataService.getUser(props.user.name);
+    return response.data.users[0].classes;
   };
 
-  const retrieveUsers = (classname) => {
-    UserDataService.getClass(classname).then((response) => {
-      console.log(response.data);
-      setUsers(response.data.users);
-    });
+  const retrieveUsers = async (classname) => {
+    //UserDataService.getClass(classname).then((response) => {
+    //  console.log(response.data);
+    //  setUsers(response.data.users);
+    //});
+    const response = await UserDataService.getClass(classname);
+    return response.data.users;
   };
 
   const retrieveClassObjs = async () => {
-    retrieveClasses();
+    var classes = await retrieveClasses();
     let classObjsTemp = [];
     for (var i = 0; i < classes.length; i++) {
       let classObj = [];
-      retrieveUsers(classes[i]);
+      var users = await retrieveUsers(classes[i]);
       for (var j = 0; j < users.length; j++) {
         var index;
         for (var k = 0; k < users[j].classes.length; k++) {
@@ -59,9 +63,11 @@ const ClassList = (props) => {
   return (
     <div>
       {classObjs.length ? (
+        
         <button onClick={retrieveClassObjs} className="btn btn-success">
           Refresh User Leaderboards
         </button>
+        
       ) : (
         <div>
           <h5>
