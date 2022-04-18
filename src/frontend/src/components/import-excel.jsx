@@ -6,6 +6,7 @@ import UserDataService from "../services/user";
 export const ImportExcel = () => {
     const [file, setFile] = useState(null);
     const [courseName, setCourseName] = useState(null);
+    const [message, setMessage] = useState("");
 
     // function that updates the excel file that is inputted into form
     const handleFileChange = async (e) => {
@@ -22,8 +23,19 @@ export const ImportExcel = () => {
     // function that submits new quiz data to database
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(file == null)
+        if(file == null && (courseName == null || courseName == ""))
         {
+            setMessage("Please select a file and enter a Course Name.")
+            return;
+        }
+        else if(file == null)
+        {
+            setMessage("Please select a file.")
+            return;
+        }
+        else if(courseName == null || courseName == "")
+        {
+            setMessage("Please enter a Course Name.")
             return;
         }
         const data = await file.arrayBuffer();
@@ -72,7 +84,7 @@ export const ImportExcel = () => {
                         break;
                     }
                 }      
-                 
+
                 if(found) // user already has a score for specified course
                 {
                     console.log(name + " is in course " + courseName);
@@ -99,18 +111,48 @@ export const ImportExcel = () => {
                 console.log(result.data);
             }
         }
+        setMessage("Success.")
     };
 
     return (
-        <div>
-            <form>
-            <h1>Excel File Upload</h1>
-            <input type='file' onChange={(e) => handleFileChange(e)} />
-            <label>
-                Enter course code: <input type='text' onChange={(e) => handleTextChange(e)} />
-            </label>
-            <button type="submit" onClick={(e) => handleSubmit(e)}>Upload</button>
-            </form>
+        //<div>
+        //    <form>
+        //    <h1>Excel File Upload</h1>
+        //    <input type='file' onChange={(e) => handleFileChange(e)} />
+        //    <br />
+        //    <label>
+        //        Enter course code: <input type='text' onChange={(e) => handleTextChange(e)} />
+        //    </label>
+        //    <br />
+        //    <button type="submit" onClick={(e) => handleSubmit(e)}>Upload</button>             
+        //    <label> {message} </label>
+        //    </form>
+        //</div>
+
+    <div className="submit-form">
+    <form>
+    <div class="d-flex flex-row">
+        <div class="p-2">
+            <label htmlFor="course">Course Name</label>
+            <input type="text" className="form-control" id="course" onChange={(e) => handleTextChange(e)} />
         </div>
+        <div class="p-2">
+            <label htmlfor="file-upload">Select a File</label>
+            <br />
+            <input type="file" class="form-control-file form-control-sm" id="file-upload" onChange={(e) => handleFileChange(e)} />
+        </div>
+    </div>
+    <div class="d-flex flex-row">
+        <div class="p-2">
+            <button onClick={handleSubmit} className="btn btn-success">
+                Upload
+            </button>
+        </div>
+        <div class="p-2">
+            <label> {message} </label>
+        </div>
+    </div>
+    </form>
+    </div>
     );
 };
