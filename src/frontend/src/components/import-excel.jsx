@@ -115,19 +115,6 @@ export const ImportExcel = () => {
     };
 
     return (
-        //<div>
-        //    <form>
-        //    <h1>Excel File Upload</h1>
-        //    <input type='file' onChange={(e) => handleFileChange(e)} />
-        //    <br />
-        //    <label>
-        //        Enter course code: <input type='text' onChange={(e) => handleTextChange(e)} />
-        //    </label>
-        //    <br />
-        //    <button type="submit" onClick={(e) => handleSubmit(e)}>Upload</button>             
-        //    <label> {message} </label>
-        //    </form>
-        //</div>
 
     <div className="submit-form">
     <form>
