@@ -14,7 +14,8 @@ Next, clone the repository to your local computer (or unzip the code)
 ### Running Backend
 
 ```
-Make sure that the .env file has been placed inside of the backend folder before trying to start the backend. This file is needed to connect to the database and have a properly functioning backend.
+Make sure that the .env file has been placed inside of the backend folder before trying to start the backend. 
+This file is needed to connect to the database and have a properly functioning backend.
 ```
 
 Now we will start MentiLeaders by running the backend. You should be inside the MentiLeaders folder here, with your path looking something like this:
