@@ -19,7 +19,7 @@ This file is needed to connect to the database and have a properly functioning b
 ```
 
 Now we will start MentiLeaders by running the backend. You should be inside the MentiLeaders folder here, with your path looking something like this:
-> C:/Users/<username>/<path-to-mentileaders>/MentiLeaders>
+> .../MentiLeaders>
 
 Change directory to the backend directory of MentiLeaders by first going into src, then backend. Like this:
 > cd src/backend
@@ -38,7 +38,7 @@ If not, some things to trouble shoot might be making sure that the .env file is 
 ### Running Frontend
 Now that the backend is running, we will do a very similar process to start the frontend.
 Start up a separate terminal (make sure the backend is still running in its own terminal) and go back to the MentiLeaders main folder, with the path:
-> C:/Users/<username>/<path-to-mentileaders>/MentiLeaders>
+> .../MentiLeaders>
 
 Change directory to the frontend directory of MentiLeaders like this:
 > cd src/frontend
