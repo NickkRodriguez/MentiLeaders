@@ -3,8 +3,6 @@ import UserDataService from "../services/user";
 import * as ReactBootStrap from "react-bootstrap";
 
 const ClassList = (props) => {
-  //const [classes, setClasses] = useState([]);
-  //const [users, setUsers] = useState([]);
   const [classObjs, setClassObjs] = useState([]);
 
   useEffect(() => {
@@ -12,23 +10,11 @@ const ClassList = (props) => {
   }, []);
 
   const retrieveClasses = async () => {
-    //UserDataService.getUser(props.user.name)
-    //  .then((response) => {
-    //    console.log(response.data);
-    //    setClasses(response.data.users[0].classes);
-    //  })
-    //  .catch((e) => {
-    //    console.log(e);
-    //  });
     const response = await UserDataService.getUser(props.user.name);
     return response.data.users[0].classes;
   };
 
   const retrieveUsers = async (classname) => {
-    //UserDataService.getClass(classname).then((response) => {
-    //  console.log(response.data);
-    //  setUsers(response.data.users);
-    //});
     const response = await UserDataService.getClass(classname);
     return response.data.users;
   };
@@ -63,19 +49,14 @@ const ClassList = (props) => {
   return (
     <div>
       {classObjs.length ? (
-        
         <button onClick={retrieveClassObjs} className="btn btn-success">
           Refresh User Leaderboards
         </button>
-        
       ) : (
         <div>
-          <h5>
-            Please login with valid username to retrieve class leaderboards
-          </h5>
-          <button onClick={retrieveClassObjs} className="btn btn-success">
-            Retrieve User Leaderboards
-          </button>
+          <label>
+            Please login with valid username to retrieve class Leaderboards
+          </label>
         </div>
       )}
       <div className="row">

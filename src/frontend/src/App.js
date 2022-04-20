@@ -23,13 +23,7 @@ function App() {
 
   return (
     <div>
-      <ReactBootStrap.Navbar className="color-nav navbar-dark" variant="light"> 
-        {/* 
-        <a href="/users" className="navbar-brand">
-          <img src={logo} width={50} height={50} alt="Logo"></img>
-          <Link to={"/users"} className="nav-link"></Link>
-        </a>
-        */}
+      <ReactBootStrap.Navbar className="color-nav navbar-dark" variant="light">
         <div className="navbar-nav navbar-light">
           <li className="nav-item text-nav m-auto">
             <Link to={"/users"} className="nav-link">
